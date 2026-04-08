@@ -3,6 +3,7 @@ package com.fileviewer.parser
 import android.content.Context
 import com.opencsv.CSVReader
 import com.fileviewer.model.TableData
+import java.io.InputStream
 import java.io.InputStreamReader
 
 object CsvParser {
@@ -12,8 +13,8 @@ object CsvParser {
         val allRows = reader.readAll()
         
         return if (allRows.isNotEmpty()) {
-            val headers = allRows[0]
-            val dataRows = allRows.drop(1)
+            val headers = allRows[0].toList()
+            val dataRows = allRows.drop(1).map { it.toList() }
             TableData(headers, dataRows)
         } else {
             TableData(emptyList(), emptyList())
