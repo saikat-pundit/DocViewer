@@ -44,7 +44,7 @@ class XlsxViewerFragment : Fragment() {
                 withContext(Dispatchers.IO) {
                     // ✅ Auto-close InputStream to prevent leaks
                     FileInputStream(path).use { inputStream ->
-                        val sheets = XlsxParser.parse(requireContext(), inputStream)
+                        val sheets = XlsxParser.parse(inputStream)
                         
                         val stringBuilder = StringBuilder()
                         
