@@ -14,6 +14,17 @@
 -dontwarn javax.xml.stream.**
 -dontwarn net.sf.saxon.**
 -dontwarn org.osgi.framework.**
-
-# Log4j specific warnings
 -dontwarn org.apache.logging.log4j.**
+
+# --- NEW FIXES FOR MISSING CLASSES ---
+# Ignore missing build tools (Ant, Maven, JavaParser) referenced by xmlbeans
+-dontwarn com.github.javaparser.**
+-dontwarn org.apache.maven.**
+-dontwarn org.apache.tools.ant.**
+-dontwarn com.sun.org.apache.xml.internal.resolver.**
+
+# Ignore missing extended Microsoft, OpenXML, and security schemas
+-dontwarn com.microsoft.schemas.**
+-dontwarn org.openxmlformats.schemas.**
+-dontwarn org.etsi.uri.**
+-dontwarn org.w3.x2000.**
