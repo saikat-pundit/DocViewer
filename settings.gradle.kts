@@ -11,8 +11,7 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
-        // Added JitPack to resolve com.github.barteksc:android-pdf-viewer
-        maven { url = uri("https://jitpack.io") } 
+        maven { url = uri("https://jitpack.io") }
     }
 }
 
