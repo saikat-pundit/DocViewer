@@ -1,7 +1,8 @@
 package com.fileviewer
 
+import android.provider.OpenableColumns
 import android.Manifest
-import android.content.Intent // <-- ADDED IMPORT
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
@@ -93,13 +94,22 @@ class MainActivity : AppCompatActivity() {
     
     private fun copyUriToTempFile(uri: Uri): String? {
         return try {
+            var originalFileName = "unknown_file"
+            contentResolver.query(uri, null, null, null, null)?.use { cursor ->
+                val nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+                if (nameIndex != -1 && cursor.moveToFirst()) {
+                    originalFileName = cursor.getString(nameIndex)
+                }
+            }
+            val tempFile = File(cacheDir, "temp_${System.currentTimeMillis()}_$originalFileName")
+            
             val inputStream = contentResolver.openInputStream(uri)
-            val tempFile = File(cacheDir, "temp_${System.currentTimeMillis()}")
             FileOutputStream(tempFile).use { outputStream ->
                 inputStream?.copyTo(outputStream)
             }
             tempFile.absolutePath
         } catch (e: Exception) {
+            e.printStackTrace()
             null
         }
     }
