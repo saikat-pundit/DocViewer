@@ -13,6 +13,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.FileInputStream
+import java.io.IOException
 
 class XlsxViewerFragment : Fragment() {
     
@@ -22,10 +23,11 @@ class XlsxViewerFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         val scrollView = ScrollView(requireContext())
-        val textView = TextView(requireContext())
-        textView.setPadding(50, 50, 50, 50)
-        textView.textSize = 14f
-        textView.typeface = android.graphics.Typeface.MONOSPACE
+        val textView = TextView(requireContext()).apply {
+            setPadding(50, 50, 50, 50)
+            textSize = 14f
+            typeface = android.graphics.Typeface.MONOSPACE
+        }
         scrollView.addView(textView)
         
         val filePath = arguments?.getString("file_path")
@@ -38,27 +40,60 @@ class XlsxViewerFragment : Fragment() {
     
     private fun loadXlsx(path: String, textView: TextView) {
         lifecycleScope.launch {
-            withContext(Dispatchers.IO) {
-                val inputStream = FileInputStream(path)
-                val sheets = XlsxParser.parse(requireContext(), inputStream)
-                val stringBuilder = StringBuilder()
-                
-                for ((index, sheet) in sheets.withIndex()) {
-                    stringBuilder.append("Sheet ${index + 1}:\n")
-                    stringBuilder.append(sheet.headers.joinToString(" | ")).append("\n")
-                    stringBuilder.append("-".repeat(50)).append("\n")
-                    for (row in sheet.rows.take(100)) {
-                        stringBuilder.append(row.joinToString(" | ")).append("\n")
+            try {
+                withContext(Dispatchers.IO) {
+                    // ✅ Auto-close InputStream to prevent leaks
+                    FileInputStream(path).use { inputStream ->
+                        val sheets = XlsxParser.parse(requireContext(), inputStream)
+                        
+                        val stringBuilder = StringBuilder()
+                        
+                        for ((index, sheet) in sheets.withIndex()) {
+                            stringBuilder.append("Sheet ${index + 1}:\n")
+                            stringBuilder.append(sheet.headers.joinToString(" | ")).append("\n")
+                            stringBuilder.append("-".repeat(50)).append("\n")
+                            for (row in sheet.rows.take(100)) {
+                                stringBuilder.append(row.joinToString(" | ")).append("\n")
+                            }
+                            if (sheet.rows.size > 100) {
+                                stringBuilder.append("\n... and ${sheet.rows.size - 100} more rows\n")
+                            }
+                            stringBuilder.append("\n\n")
+                        }
+                        
+                        // ✅ Check if fragment is still attached before UI update
+                        if (isAdded && !requireActivity().isFinishing) {
+                            withContext(Dispatchers.Main) {
+                                textView.text = stringBuilder.toString()
+                            }
+                        }
                     }
-                    if (sheet.rows.size > 100) {
-                        stringBuilder.append("\n... and ${sheet.rows.size - 100} more rows\n")
-                    }
-                    stringBuilder.append("\n\n")
                 }
-                
+            } catch (e: NoClassDefFoundError) {
+                // ✅ Handle missing POI classes (ProGuard issue)
                 withContext(Dispatchers.Main) {
-                    textView.text = stringBuilder.toString()
+                    if (isAdded) {
+                        textView.text = "Error: Missing library components.\n\nPlease reinstall the app or contact support.\n\n[${e.localizedMessage ?: e.message}]"
+                        textView.setTextColor(android.graphics.Color.RED)
+                    }
                 }
+                android.util.Log.e("XlsxViewer", "Missing class: ${e.message}", e)
+            } catch (e: IOException) {
+                withContext(Dispatchers.Main) {
+                    if (isAdded) {
+                        textView.text = "Error reading file:\n${e.localizedMessage}"
+                        textView.setTextColor(android.graphics.Color.RED)
+                    }
+                }
+                android.util.Log.e("XlsxViewer", "IO error: ${e.message}", e)
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    if (isAdded) {
+                        textView.text = "Failed to load spreadsheet:\n${e.localizedMessage ?: e.javaClass.simpleName}\n\nTry a smaller file."
+                        textView.setTextColor(android.graphics.Color.RED)
+                    }
+                }
+                android.util.Log.e("XlsxViewer", "Parse error: ${e.message}", e)
             }
         }
     }
