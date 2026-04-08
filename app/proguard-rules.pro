@@ -1,0 +1,3 @@
+-keep class org.apache.poi.** { *; }
+-dontwarn org.apache.poi.**
+-keep class com.opencsv.** { *; }
