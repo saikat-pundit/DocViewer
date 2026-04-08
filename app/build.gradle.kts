@@ -63,21 +63,16 @@ dependencies {
     implementation("com.google.android.material:material:1.11.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0")
-    
-    // PDF Viewer
     implementation("com.github.DImuthuUpe:AndroidPdfViewer:2.8.1")
-    
-    // STRATEGY 3: Apache POI Diet
-    // Exclude massive cryptography, signature validation, and 2D graphics rendering libraries.
-    // We only need the core text/table extractors.
     implementation("org.apache.poi:poi:5.2.5")
     implementation("org.apache.poi:poi-ooxml:5.2.5") {
-        exclude(group = "org.apache.santuario", module = "xmlsec") // Digital signatures
-        exclude(group = "org.bouncycastle", module = "bcpkix-jdk15on") // Heavy Crypto
-        exclude(group = "org.bouncycastle", module = "bcprov-jdk15on") // Heavy Crypto
-        exclude(group = "org.apache.xmlgraphics", module = "batik-all") // Advanced graphics rendering
-        exclude(group = "com.github.virtuald", module = "curvesapi") // Complex math curves
-    }
+    exclude(group = "org.apache.santuario", module = "xmlsec") // Safe to exclude
+    exclude(group = "org.bouncycastle", module = "bcpkix-jdk15on") // Safe
+    exclude(group = "org.bouncycastle", module = "bcprov-jdk15on") // Safe
+    exclude(group = "org.apache.xmlgraphics", module = "batik-all")
+}
+implementation("org.apache.poi:poi-ooxml-schemas:4.1.2") // Lightweight schema support
+implementation("xml-apis:xml-apis:1.4.01") // Provides javax.xml.stream.* for Android
     
     // CSV
     implementation("com.opencsv:opencsv:5.9")
