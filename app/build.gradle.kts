@@ -42,14 +42,6 @@ android {
         }
     }
     
-    // Update the output file name to include the architecture type
-    android.applicationVariants.all {
-        outputs.all {
-            this as com.android.build.gradle.internal.api.ApkVariantOutputImpl
-            val abi = filters.find { it.identifier == com.android.build.VariantOutput.ABI }?.identifier ?: "universal"
-            outputFileName = "DocViewer-${abi}-release.apk"
-        }
-    }
     
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
