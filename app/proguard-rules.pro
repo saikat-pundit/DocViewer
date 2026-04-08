@@ -28,3 +28,26 @@
 -dontwarn org.openxmlformats.schemas.**
 -dontwarn org.etsi.uri.**
 -dontwarn org.w3.x2000.**
+
+# === CRITICAL: Keep all OpenXML schema classes used via reflection ===
+-keep class org.openxmlformats.schemas.wordprocessingml.x2006.main.** { *; }
+-keep class org.openxmlformats.schemas.spreadsheetml.x2006.main.** { *; }
+-keep class org.openxmlformats.schemas.officeDocument.x2006.** { *; }
+-keep class com.microsoft.schemas.** { *; }
+
+# === Keep all XmlBeans-generated classes (POI uses reflection heavily) ===
+-keep class * extends org.apache.xmlbeans.XmlObject { *; }
+-keep class org.apache.xmlbeans.impl.** { *; }
+-keepnames class schemaorg_apache_xmlbeans.** { *; }
+
+# === Keep XML parsing interfaces required at runtime ===
+-keep interface javax.xml.stream.** { *; }
+-keep class javax.xml.stream.** { *; }
+-keep class com.sun.org.apache.xerces.** { *; }
+-keep class org.w3c.dom.** { *; }
+
+# === Suppress warnings for Android-missing classes (safe to ignore) ===
+-dontwarn javax.xml.stream.**
+-dontwarn org.w3c.dom.**
+-dontwarn com.sun.xml.**
+-dontwarn com.sun.org.apache.**
