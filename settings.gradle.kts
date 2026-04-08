@@ -3,18 +3,18 @@ pluginManagement {
         google()
         mavenCentral()
         gradlePluginPortal()
-        maven("https://jitpack.io")
     }
 }
 
 dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.PREFER_SETTINGS)
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
         google()
         mavenCentral()
-        maven { url = uri("https://jitpack.io") }
+        // Added JitPack to resolve com.github.barteksc:android-pdf-viewer
+        maven { url = uri("https://jitpack.io") } 
     }
 }
 
-rootProject.name = "android-file-viewer"
+rootProject.name = "FileViewer"
 include(":app")
