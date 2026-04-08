@@ -54,7 +54,7 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0")
     
     // PDF
-    implementation("androidx.pdf:pdf-viewer:1.0.0")
+    implementation("com.github.barteksc:android-pdf-viewer:3.2.0-beta.1")
     
     // Office files (Apache POI)
     implementation("org.apache.poi:poi:5.2.5")
