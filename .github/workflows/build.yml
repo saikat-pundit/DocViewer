@@ -25,15 +25,13 @@ jobs:
       uses: gradle/actions/setup-gradle@v3
       with:
         gradle-version: '8.2'
-        # The setup-gradle action automatically saves/restores the ~/.gradle/caches 
-        # state between workflow runs to heavily reduce download times.
+
     
     - name: Make Gradle Wrapper Executable
       run: chmod +x ./gradlew
     
     - name: Build Release APKs
-      # ⚡ --build-cache caches compiled tasks locally. 
-      # ⚡ --parallel runs independent tasks concurrently.
+
       run: ./gradlew assembleRelease --build-cache --parallel
     
     - name: Create Release & Upload APKs
