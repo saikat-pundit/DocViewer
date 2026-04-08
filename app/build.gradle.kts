@@ -56,23 +56,25 @@ android {
         viewBinding = true
     }
 }
-
 dependencies {
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.11.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0")
+    
+    // PDF Viewer
     implementation("com.github.DImuthuUpe:AndroidPdfViewer:2.8.1")
+    
+    // ✅ CLEAN POI CONFIGURATION (NO SCHEMAS)
     implementation("org.apache.poi:poi:5.2.5")
-implementation("org.apache.poi:poi-ooxml:5.2.5") {
-    exclude(group = "org.apache.santuario", module = "xmlsec")      // Safe: digital signatures
-    exclude(group = "org.bouncycastle", module = "bcpkix-jdk15on")  // Safe: crypto
-    exclude(group = "org.bouncycastle", module = "bcprov-jdk15on")  // Safe: crypto
-    exclude(group = "org.apache.xmlgraphics", module = "batik-all")
-}
-implementation("org.apache.poi:poi-ooxml-schemas:4.1.2") // Lightweight schema support
-implementation("xml-apis:xml-apis:1.4.01") // Provides javax.xml.stream.* for Android
+    implementation("org.apache.poi:poi-ooxml:5.2.5") {
+        exclude(group = "org.apache.santuario", module = "xmlsec")
+        exclude(group = "org.bouncycastle", module = "bcpkix-jdk15on")
+        exclude(group = "org.bouncycastle", module = "bcprov-jdk15on")
+        exclude(group = "org.apache.xmlgraphics", module = "batik-all")
+        // ⚠️ DO NOT exclude curvesapi
+    }
     
     // CSV
     implementation("com.opencsv:opencsv:5.9")
