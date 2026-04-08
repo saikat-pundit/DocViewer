@@ -40,12 +40,10 @@ jobs:
       run: gradle assembleRelease --build-cache --parallel
     
     - name: Create Release & Upload APKs
-      uses: softprops/action-gh-release@v2
+      uses: softprops/action-gh-release@v1
       with:
         tag_name: ${{ github.event.inputs.tag }}
         name: Release ${{ github.event.inputs.tag }}
-        generate_release_notes: false
-        draft: false
         prerelease: false
         files: app/build/outputs/apk/release/**/*.apk 
       env:
