@@ -30,17 +30,19 @@ android {
     }
 
     buildTypes {
-        release {
-            // STRATEGY 2: Aggressive Code and Resource Shrinking
-            isMinifyEnabled = true
-            isShrinkResources = true
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
-            signingConfig = signingConfigs.getByName("debug")
-        }
+    release {
+        isMinifyEnabled = true
+        isShrinkResources = true
+        proguardFiles(
+            getDefaultProguardFile("proguard-android-optimize.txt"),
+            "proguard-rules.pro"
+        )
+        signingConfig = signingConfigs.getByName("debug")
+        
+        // ✅ Add this line to help R8 handle missing optional classes
+        additionalProguardRules += "-dontwarn **"
     }
+}
     
     
     compileOptions {
