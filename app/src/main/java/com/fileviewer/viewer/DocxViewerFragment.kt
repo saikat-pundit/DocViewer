@@ -40,7 +40,7 @@ class DocxViewerFragment : Fragment() {
             withContext(Dispatchers.IO) {
     try {
         val inputStream = FileInputStream(path)
-        val content = DocxParser.parse(requireContext(), inputStream) // or XlsxParser.parse(...)
+        val content = DocxParser.parse(inputStream)
         withContext(Dispatchers.Main) {
             textView.text = content
         }
