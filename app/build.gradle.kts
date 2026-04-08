@@ -56,6 +56,10 @@ android {
         viewBinding = true
     }
 }
+// 🔥 CRITICAL: Force Gradle to ignore the old conflicting schemas
+configurations.all {
+    exclude(group = "org.apache.poi", module = "poi-ooxml-schemas")
+}
 dependencies {
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
