@@ -33,12 +33,12 @@ android {
         release {
             // STRATEGY 2: Aggressive Code and Resource Shrinking
             isMinifyEnabled = true
-            isShrinkResources = true // <-- ADDED: Strips unused XML and drawables
+            isShrinkResources = true
             proguardFiles(
-                // Using the 'optimize' version of ProGuard rules for maximum reduction
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            signingConfig = signingConfigs.getByName("debug")
         }
     }
     
