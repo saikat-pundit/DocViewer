@@ -53,8 +53,8 @@ dependencies {
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0")
     
-    // PDF
-    implementation("com.github.barteksc:android-pdf-viewer:2.8.2")
+    // PDF - Swapped to the active, working fork (original repo was renamed/moved)
+    implementation("com.github.DImuthuUpe:AndroidPdfViewer:2.8.1")
     
     // Office files (Apache POI)
     implementation("org.apache.poi:poi:5.2.5")
