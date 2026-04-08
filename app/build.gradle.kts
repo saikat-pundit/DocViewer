@@ -9,7 +9,7 @@ android {
 
     defaultConfig {
         applicationId = "com.fileviewer"
-        minSdk = 21
+        minSdk = 26 // <-- CHANGED FROM 21 TO 26
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -53,7 +53,7 @@ dependencies {
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0")
     
-    // PDF - Swapped to the active, working fork (original repo was renamed/moved)
+    // PDF
     implementation("com.github.DImuthuUpe:AndroidPdfViewer:2.8.1")
     
     // Office files (Apache POI)
