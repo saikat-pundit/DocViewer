@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">File Viewer</string>
+    <string name="open_file">Open File</string>
+    <string name="select_file">Select a file to view</string>
+    <string name="unsupported_format">Unsupported file format</string>
+    <string name="error_loading">Error loading file</string>
+    <string name="permission_required">Storage permission required</string>
+    <string name="file_not_found">File not found</string>
+    <string name="memory_error">File too large to open</string>
+</resources>
