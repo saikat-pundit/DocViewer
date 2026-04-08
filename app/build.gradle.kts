@@ -3,6 +3,11 @@ plugins {
     id("org.jetbrains.kotlin.android")
 }
 
+// 🔥 CRITICAL: Force Gradle to ignore the old conflicting schemas
+configurations.all {
+    exclude(group = "org.apache.poi", module = " "poi-ooxml-schemas")
+}
+
 android {
     namespace = "com.fileviewer"
     compileSdk = 34
@@ -18,32 +23,26 @@ android {
     }
 
     // STRATEGY 1: ABI Splitting
-    // This tells Gradle to build separate APKs for ARM devices only, 
-    // stripping out x86/x86_64 emulator code from the PDF viewer.
     splits {
         abi {
             isEnable = true
             reset()
-            include("armeabi-v7a", "arm64-v8a") // Only support standard Android ARM architectures
-            isUniversalApk = false // Do not build the massive 31MB universal APK
+            include("armeabi-v7a", "arm64-v8a")
+            isUniversalApk = false
         }
     }
 
     buildTypes {
-    release {
-        isMinifyEnabled = true
-        isShrinkResources = true
-        proguardFiles(
-            getDefaultProguardFile("proguard-android-optimize.txt"),
-            "proguard-rules.pro"
-        )
-        signingConfig = signingConfigs.getByName("debug")
-        
-        // ✅ Add this line to help R8 handle missing optional classes
-        additionalProguardRules += "-dontwarn **"
+        release {
+            isMinifyEnabled = true
+            isShrinkResources = true
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+            signingConfig = signingConfigs.getByName("debug")
+        }
     }
-}
-    
     
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
@@ -58,10 +57,7 @@ android {
         viewBinding = true
     }
 }
-// 🔥 CRITICAL: Force Gradle to ignore the old conflicting schemas
-configurations.all {
-    exclude(group = "org.apache.poi", module = "poi-ooxml-schemas")
-}
+
 dependencies {
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
@@ -72,14 +68,14 @@ dependencies {
     // PDF Viewer
     implementation("com.github.DImuthuUpe:AndroidPdfViewer:2.8.1")
     
-    // ✅ CLEAN POI CONFIGURATION (NO SCHEMAS)
+    // ✅ CLEAN POI CONFIGURATION (NO SCHEMAS, NO curvesapi EXCLUDE)
     implementation("org.apache.poi:poi:5.2.5")
     implementation("org.apache.poi:poi-ooxml:5.2.5") {
         exclude(group = "org.apache.santuario", module = "xmlsec")
         exclude(group = "org.bouncycastle", module = "bcpkix-jdk15on")
         exclude(group = "org.bouncycastle", module = "bcprov-jdk15on")
         exclude(group = "org.apache.xmlgraphics", module = "batik-all")
-        // ⚠️ DO NOT exclude curvesapi
+        // ⚠️ DO NOT exclude curvesapi - required for XLSX parsing
     }
     
     // CSV
