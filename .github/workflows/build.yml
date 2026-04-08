@@ -1,7 +1,17 @@
-name: Android Build
+name: Android Release Build
 
 on:
   workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Release Tag (e.g., v1.0.0)'
+        required: true
+        default: 'v1.0.0'
+        type: string
+
+# Required permission to create a GitHub Release
+permissions:
+  contents: write
 
 jobs:
   build:
@@ -16,17 +26,32 @@ jobs:
       with:
         java-version: '17'
         distribution: 'temurin'
+        cache: 'gradle' # ⚡ Explicitly caches Gradle dependencies
     
     - name: Setup Gradle
       uses: gradle/actions/setup-gradle@v3
       with:
         gradle-version: '8.2'
+        # The setup-gradle action automatically saves/restores the ~/.gradle/caches 
+        # state between workflow runs to heavily reduce download times.
     
-    - name: Build APK
-      run: gradle assembleDebug
+    - name: Make Gradle Wrapper Executable
+      run: chmod +x ./gradlew
     
-    - name: Upload APK
-      uses: actions/upload-artifact@v4
+    - name: Build Release APKs
+      # ⚡ --build-cache caches compiled tasks locally. 
+      # ⚡ --parallel runs independent tasks concurrently.
+      run: ./gradlew assembleRelease --build-cache --parallel
+    
+    - name: Create Release & Upload APKs
+      uses: softprops/action-gh-release@v2
       with:
-        name: DocViewer
-        path: app/build/outputs/apk/debug/*.apk
+        tag_name: ${{ github.event.inputs.tag }}
+        name: Release ${{ github.event.inputs.tag }}
+        generate_release_notes: true
+        draft: false
+        prerelease: false
+        # Points to the release output folder where your split APKs are generated
+        files: app/build/outputs/apk/release/*.apk 
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
