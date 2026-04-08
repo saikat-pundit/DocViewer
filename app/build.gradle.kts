@@ -3,11 +3,6 @@ plugins {
     id("org.jetbrains.kotlin.android")
 }
 
-// 🔥 CRITICAL: Force Gradle to ignore the old conflicting schemas
-configurations.all {
-    exclude(group = "org.apache.poi", module = " "poi-ooxml-schemas")
-}
-
 android {
     namespace = "com.fileviewer"
     compileSdk = 34
@@ -18,11 +13,10 @@ android {
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
-
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
-    // STRATEGY 1: ABI Splitting
+    // ABI Splitting for ARM devices only
     splits {
         abi {
             isEnable = true
@@ -68,7 +62,7 @@ dependencies {
     // PDF Viewer
     implementation("com.github.DImuthuUpe:AndroidPdfViewer:2.8.1")
     
-    // ✅ CLEAN POI CONFIGURATION (NO SCHEMAS, NO curvesapi EXCLUDE)
+    // ✅ APACHE POI - CLEAN CONFIGURATION
     implementation("org.apache.poi:poi:5.2.5")
     implementation("org.apache.poi:poi-ooxml:5.2.5") {
         exclude(group = "org.apache.santuario", module = "xmlsec")
