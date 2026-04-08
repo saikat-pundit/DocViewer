@@ -65,10 +65,10 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0")
     implementation("com.github.DImuthuUpe:AndroidPdfViewer:2.8.1")
     implementation("org.apache.poi:poi:5.2.5")
-    implementation("org.apache.poi:poi-ooxml:5.2.5") {
-    exclude(group = "org.apache.santuario", module = "xmlsec") // Safe to exclude
-    exclude(group = "org.bouncycastle", module = "bcpkix-jdk15on") // Safe
-    exclude(group = "org.bouncycastle", module = "bcprov-jdk15on") // Safe
+implementation("org.apache.poi:poi-ooxml:5.2.5") {
+    exclude(group = "org.apache.santuario", module = "xmlsec")      // Safe: digital signatures
+    exclude(group = "org.bouncycastle", module = "bcpkix-jdk15on")  // Safe: crypto
+    exclude(group = "org.bouncycastle", module = "bcprov-jdk15on")  // Safe: crypto
     exclude(group = "org.apache.xmlgraphics", module = "batik-all")
 }
 implementation("org.apache.poi:poi-ooxml-schemas:4.1.2") // Lightweight schema support
