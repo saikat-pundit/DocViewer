@@ -57,13 +57,6 @@
 -dontwarn aQute.bnd.annotation.spi.**
 -dontwarn org.osgi.framework.**
 
-# === Optimization hints for R8 ===
-# Allow R8 to remove unused POI features we don't use
--assumenosideeffects class org.apache.poi.** {
-    public *** set***(...);
-    public *** get***();
-}
-
 # === Keep AndroidPdfViewer native bindings ===
 -keep class com.shockwave.**
 -keep class com.github.barteksc.pdfviewer.** { *; }
