@@ -38,12 +38,20 @@ class DocxViewerFragment : Fragment() {
     private fun loadDocx(path: String, textView: TextView) {
         lifecycleScope.launch {
             withContext(Dispatchers.IO) {
-                val inputStream = FileInputStream(path)
-                val content = DocxParser.parse(requireContext(), inputStream)
-                withContext(Dispatchers.Main) {
-                    textView.text = content
-                }
-            }
+    try {
+        val inputStream = FileInputStream(path)
+        val content = DocxParser.parse(requireContext(), inputStream) // or XlsxParser.parse(...)
+        withContext(Dispatchers.Main) {
+            textView.text = content
+        }
+    } catch (e: Exception) {
+        withContext(Dispatchers.Main) {
+            textView.text = "Failed to load file:\n${e.localizedMessage ?: e.javaClass.simpleName}\n\nPlease try a smaller file."
+            textView.setTextColor(android.graphics.Color.RED)
+        }
+        android.util.Log.e("ViewerFragment", "Load error: ${e.message}", e)
+    }
+}
         }
     }
 }
