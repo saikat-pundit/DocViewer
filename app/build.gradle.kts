@@ -69,11 +69,12 @@ dependencies {
         exclude(group = "org.bouncycastle", module = "bcpkix-jdk15on")
         exclude(group = "org.bouncycastle", module = "bcprov-jdk15on")
         exclude(group = "org.apache.xmlgraphics", module = "batik-all")
-    }
-    
-    // 👇 ADD THESE TWO LINES: Android XML Parsers for OOXML
-    implementation("com.fasterxml:aalto-xml:1.3.2")
+    }    
+    // 👇 ADD STAX-API BACK IN
+    implementation("javax.xml.stream:stax-api:1.0-2")
+    implementation("com.fasterxml:aalto-xml:1.3.2") 
     implementation("org.codehaus.woodstox:stax2-api:4.2.1")
+
     // CSV
     implementation("com.opencsv:opencsv:5.9")
     
