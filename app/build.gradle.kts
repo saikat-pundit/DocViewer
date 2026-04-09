@@ -69,8 +69,11 @@ dependencies {
         exclude(group = "org.bouncycastle", module = "bcpkix-jdk15on")
         exclude(group = "org.bouncycastle", module = "bcprov-jdk15on")
         exclude(group = "org.apache.xmlgraphics", module = "batik-all")
-        // ⚠️ DO NOT exclude curvesapi - required for XLSX parsing
     }
+    
+    // 👇 ADD THESE TWO LINES: Android XML Parsers for OOXML
+    implementation("javax.xml.stream:stax-api:1.0-2")
+    implementation("com.fasterxml:aalto-xml:1.3.2")
     
     // CSV
     implementation("com.opencsv:opencsv:5.9")
