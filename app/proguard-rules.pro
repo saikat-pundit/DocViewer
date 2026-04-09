@@ -14,10 +14,10 @@
 -keep class * extends org.apache.xmlbeans.XmlObject { *; }
 -keep class org.apache.xmlbeans.impl.** { *; }
 
-# === Keep XML parsing interfaces ===
--keep interface javax.xml.stream.** { *; }
+# 👇 NEW: Keep the Android XML Parsers we just added
 -keep class javax.xml.stream.** { *; }
--keep class org.w3c.dom.** { *; }
+-keep class com.fasterxml.** { *; }
+-keep class org.codehaus.stax2.** { *; }
 
 # === Suppress warnings for Android-missing optional classes ===
 -dontwarn java.awt.**
@@ -31,7 +31,6 @@
 -dontwarn org.etsi.uri.x01903.v13.**
 -dontwarn org.etsi.uri.x01903.v14.**
 -dontwarn org.w3.x2000.x09.xmldsig.**
--dontwarn javax.xml.stream.**
 -dontwarn org.w3c.dom.**
 -dontwarn com.sun.org.apache.**
 -dontwarn com.sun.xml.**
