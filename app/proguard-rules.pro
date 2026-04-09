@@ -1,7 +1,9 @@
 # === Keep Apache POI core classes ===
 -keep class org.apache.poi.** { *; }
 -keep class com.opencsv.** { *; }
-
+# === Suppress warnings for META-INF service loading ===
+-dontwarn META-INF.services.javax.xml.stream.**
+-dontwarn javax.xml.stream.**
 # === Keep OpenXML schema classes (critical for DOCX/XLSX) ===
 -keep class org.openxmlformats.schemas.** { *; }
 -keep class com.microsoft.schemas.** { *; }
