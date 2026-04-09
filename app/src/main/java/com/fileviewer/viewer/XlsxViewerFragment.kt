@@ -86,14 +86,14 @@ class XlsxViewerFragment : Fragment() {
                     }
                 }
                 android.util.Log.e("XlsxViewer", "IO error: ${e.message}", e)
-            } catch (e: Exception) {
+            } catch (t: Throwable) { // ✅ FIXED: Now catches fatal system errors too
                 withContext(Dispatchers.Main) {
                     if (isAdded) {
-                        textView.text = "Failed to load spreadsheet:\n${e.localizedMessage ?: e.javaClass.simpleName}\n\nTry a smaller file."
+                        textView.text = "Failed to load spreadsheet:\n${t.localizedMessage ?: t.javaClass.simpleName}\n\nTry a smaller file."
                         textView.setTextColor(android.graphics.Color.RED)
                     }
                 }
-                android.util.Log.e("XlsxViewer", "Parse error: ${e.message}", e)
+                android.util.Log.e("XlsxViewer", "Parse error: ${t.message}", t)
             }
         }
     }
