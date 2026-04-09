@@ -39,16 +39,25 @@ class DocxViewerFragment : Fragment() {
         lifecycleScope.launch {
             withContext(Dispatchers.IO) {
                 try {
-                    val inputStream = FileInputStream(path)
-                    val content = DocxParser.parse(inputStream)
-                    withContext(Dispatchers.Main) {
-                        textView.text = content
+                    // ✅ 1. Use .use {} to auto-close the stream and prevent memory leaks
+                    FileInputStream(path).use { inputStream ->
+                        val content = DocxParser.parse(inputStream)
+                        
+                        // ✅ 2. Check if fragment is still attached before updating UI
+                        if (isAdded && !requireActivity().isFinishing) {
+                            withContext(Dispatchers.Main) {
+                                textView.text = content
+                            }
+                        }
                     }
-                // 👇 CHANGE Exception TO Throwable
                 } catch (t: Throwable) { 
+                    // ✅ Catching Throwable perfectly handles fatal XML errors
                     withContext(Dispatchers.Main) {
-                        textView.text = "Failed to load file:\n${t.localizedMessage ?: t.javaClass.simpleName}\n\nPlease try a smaller file."
-                        textView.setTextColor(android.graphics.Color.RED)
+                        // ✅ Check if fragment is attached before showing error message
+                        if (isAdded) {
+                            textView.text = "Failed to load file:\n${t.localizedMessage ?: t.javaClass.simpleName}\n\nPlease try a smaller file."
+                            textView.setTextColor(android.graphics.Color.RED)
+                        }
                     }
                     android.util.Log.e("ViewerFragment", "Load error: ${t.message}", t)
                 }
